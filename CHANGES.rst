@@ -4,27 +4,36 @@ Version History
 Version: 1.2.7 (unreleased)
 -------------------------------------------------------------------------------
 
+BACKWARD-INCOMPATIBLE:
+
+* Replace old-style tag-expressions with `cucumber-tag-expressions`_
+
+  HINTS:
+
+  - DEPRECATING: tag-expressions v1 (old-style)
+  - BUT: Currently, tag-expression version is automatically detected (and used).
+
+
 GOALS:
 
 - Improve support for Windows (continued)
 - FIX: Unicode problems on Windows (in behave-1.2.6)
 - FIX: Regression test problems on Windows (in behave-1.2.6)
-- Drop support for Python 2.6
-
-DOCUMENTATION:
-
-* pull  #684: Fix typo in "install.rst" (provided by: mstred)
-* pull  #628: Changed pythonhosted.org links to readthedocs.io (provided by: chrisbrake)
 
 
 ENHANCEMENTS:
 
+* Add support for Gherkin v6 grammar and syntax in ``*.feature`` files
+* Use cucumber "gherkin-languages.json" now (simplify: Gherkin v6 aliases, language usage)
+* Use `cucumber-tag-expressions`_ with tag-matching extension (superceeds: old-style tag-expressions)
 * issue #678: Scenario Outline: Support tags with commas and semicolons (provided by: lawnmowerlatte, pull #679)
 * issue #675: Feature files cannot be found within symlink directories (provided by: smadness, pull #680)
 
 
 FIXED:
 
+* issue #725: Scenario Outline description lines seem to be ignored (submitted by: nizwiz)
+* issue #713: Background section doesn't support description (provided by: dgou)
 * pull  #657: Allow async steps with timeouts to fail when they raise exceptions (provided by: ALSchwalm)
 * issue #631: ScenarioOutline variables not possible in table headings (provided by: mschnelle, pull #642)
 * issue #619: Context __getattr__ should raise AttributeError instead of KeyError (submitted by: anxodio)
@@ -34,6 +43,19 @@ MINOR:
 * pull  #655: Use pytest instead of py.test per upstream recommendation (provided by: scop)
 * issue #654: tox.ini: pypi.python.org -> pypi.org (submitted by: pradyunsg)
 * pull  #660: Fix minor typos (provided by: rrueth)
+
+DOCUMENTATION:
+
+* pull  #731: Update links to Django docs (provided by: bittner)
+* pull  #722: DOC remove remaining pythonhosted links (provided by: leszekhanusz)
+* pull  #701: behave/runner.py docstrings (provided by: spitGlued)
+* pull  #700: Fix wording of "gherkin.rst" (provided by: spitGlued)
+* pull  #699: Fix wording of "philosophy.rst" (provided by: spitGlued)
+* pull  #684: Fix typo in "install.rst" (provided by: mstred)
+* pull  #628: Changed pythonhosted.org links to readthedocs.io (provided by: chrisbrake)
+
+
+.. _`cucumber-tag-expressions`: https://pypi.org/project/cucumber-tag-expressions/
 
 
 Version: 1.2.6 (2018-02-25)
