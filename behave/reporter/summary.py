@@ -145,6 +145,7 @@ class SummaryReporter(Reporter):
         self.scenario_summary = summary_zero_data.copy()
         self.step_summary = {Status.undefined.name: 0}
         self.step_summary.update(summary_zero_data)
+        self.duration = 0.0
         self.run_starttime = 0
         self.run_endtime = 0
         self.failed_scenarios = []
