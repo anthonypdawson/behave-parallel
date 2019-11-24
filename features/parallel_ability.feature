@@ -1,6 +1,7 @@
 Feature: Parallel options
 
-    Scenario: Test parallel correctness 
+    @setup
+    Scenario: Test parallel correctness
         Given a new working directory
         And a file named "features/parallel_running_scenarios.feature" with:
           """
@@ -128,7 +129,7 @@ Feature: Parallel options
 
     Scenario: Test parallel correctness with serial & parallel features
         When I run "behave --processes 8 --parallel-element scenario"
-        Then it should fail 
+        Then it should fail
         And the command output should contain:
           """
           7 scenario(s) and 1 feature(s) queued for consideration by 8 workers
@@ -142,7 +143,7 @@ Feature: Parallel options
 
     Scenario: Test parallel correctness split at features
         When I run "behave --processes 8 --parallel-element feature"
-        Then it should fail 
+        Then it should fail
         And the command output should contain:
           """
           0 scenario(s) and 2 feature(s) queued for consideration by 8 workers
