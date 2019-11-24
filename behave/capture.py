@@ -113,10 +113,19 @@ class Captured(object):
         return ret
 
     def recv_status(self, value):
-        assert not self, "Captured already has content"
         for k in 'stdout', 'stderr', 'log_output':
-            if k in value:
-                setattr(self, k, value[k])
+            if k not in value:
+                continue
+
+            old = getattr(self, k)
+            if old and value[k] and value[k].strip() == old.strip():
+                continue
+            elif old.strip():
+                if not old.endswith('\n'):
+                    old += '\n'
+            else:
+                old = u''
+            setattr(self, k, old + value[k])
 
 
 class CaptureController(object):
