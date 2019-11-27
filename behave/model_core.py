@@ -430,7 +430,7 @@ class TagAndStatusStatement(BasicStatement):
 
     def send_status(self):
         ret = super(TagAndStatusStatement, self).send_status()
-        ret['status'] = self._cached_status
+        ret['status'] = self.status
         ret['should_skip'] = self.should_skip
         ret['skip_reason'] = self.skip_reason
         return ret
