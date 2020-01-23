@@ -272,6 +272,7 @@ class MultiProcClientRunner(Runner):
 
     def run_with_paths(self):
         self.context = Context(self)
+        self.context.thread_num = self.num
         self.load_hooks()
         self.load_step_definitions()
         assert not self.aborted
