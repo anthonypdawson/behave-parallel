@@ -18,6 +18,7 @@ if six.PY2:
 else:
     import queue
 
+THREAD_IDENTIFICATION = None
 
 class MultiProcRunner(Runner):
     """Master multiprocessing runner: scans jobs and distributes to slaves
@@ -45,10 +46,10 @@ class MultiProcRunner(Runner):
         feature_count, scenario_count = self.scan_features()
         njobs = len(self.jobs_map)
         proc_count = int(self.config.proc_count)
-        print ("INFO: {0} scenario(s) and {1} feature(s) queued for"
+        print(("INFO: {0} scenario(s) and {1} feature(s) queued for"
                 " consideration by {2} workers. Some may be skipped if the"
                 " -t option was given..."
-               .format(scenario_count, feature_count, proc_count))
+               .format(scenario_count, feature_count, proc_count)))
 
         procs = []
         old_outs = self.config.outputs
@@ -63,7 +64,7 @@ class MultiProcRunner(Runner):
             p.start()
             del p
 
-        print ("INFO: started {0} workers for {1} jobs.".format(proc_count, njobs))
+        print(("INFO: started {0} workers for {1} jobs.".format(proc_count, njobs)))
 
         self.config.reporters = old_reporters
         self.formatters = make_formatters(self.config, old_outs)
@@ -118,7 +119,7 @@ class MultiProcRunner(Runner):
 
         item = self.jobs_map.get(job_id)
         if item is None:
-            print("ERROR: job_id=%x not found in master map" % job_id)
+            print(("ERROR: job_id=%x not found in master map" % job_id))
             return True
 
         try:
@@ -130,9 +131,9 @@ class MultiProcRunner(Runner):
                 if feature.is_finished:
                     self._output_feature(feature)
                 else:
-                    print("INFO: scenario finished: %x" % (job_id,))
+                    print(("INFO: scenario finished: %x" % (job_id,)))
         except Exception as e:
-            print("ERROR: cannot receive status for %r: %s" % (item, e))
+            print(("ERROR: cannot receive status for %r: %s" % (item, e)))
             if self.config.wip and not self.config.quiet:
                 import traceback
                 traceback.print_exc()
@@ -222,6 +223,7 @@ class MultiProcClientRunner(Runner):
     def __init__(self, parent, num):
         super(MultiProcClientRunner, self).__init__(parent.config)
         self.num = num
+        THREAD_IDENTIFICATION = self.num
         self.jobs_map = parent.jobs_map
         self.jobsq = parent.jobsq
         self.resultsq = parent.resultsq
@@ -241,7 +243,7 @@ class MultiProcClientRunner(Runner):
 
             job = self.jobs_map.get(job_id, None)
             if job is None:
-                print("ERROR: missing job id=%s from map" % job_id)
+                print(("ERROR: missing job id=%s from map" % job_id))
                 self.jobsq.task_done()
                 continue
 
@@ -250,7 +252,7 @@ class MultiProcClientRunner(Runner):
                 try:
                     self.resultsq.put((job_id, job.send_status()))
                 except Exception as e:
-                    print("ERROR: cannot send result: {0}".format(e))
+                    print(("ERROR: cannot send result: {0}".format(e)))
             elif isinstance(job, Scenario):
                 # construct a dummy feature, having only this scenario
                 kwargs = {}
@@ -265,7 +267,7 @@ class MultiProcClientRunner(Runner):
                 try:
                     self.resultsq.put((job_id, job.send_status()))
                 except Exception as e:
-                    print("ERROR: cannot send result: {0}".format(e))
+                    print(("ERROR: cannot send result: {0}".format(e)))
             else:
                 raise TypeError("Don't know how to process: %s" % type(job))
             self.jobsq.task_done()
@@ -273,7 +275,6 @@ class MultiProcClientRunner(Runner):
     def run_with_paths(self):
         self.context = Context(self)
         self.context.thread_num = self.num
-        print("Setting thread number: self.num: {}, context.thread_num: {}".format(self.num, self.context.thread_num))
         self.load_hooks()
         self.load_step_definitions()
         assert not self.aborted
