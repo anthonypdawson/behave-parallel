@@ -223,6 +223,7 @@ class MultiProcClientRunner(Runner):
     def __init__(self, parent, num):
         super(MultiProcClientRunner, self).__init__(parent.config)
         self.num = num
+        global THREAD_IDENTIFICATION
         THREAD_IDENTIFICATION = self.num
         self.jobs_map = parent.jobs_map
         self.jobsq = parent.jobsq
@@ -274,7 +275,8 @@ class MultiProcClientRunner(Runner):
 
     def run_with_paths(self):
         self.context = Context(self)
-        self.context.thread_num = self.num
+        # Do not start at zero identifying threads in context
+        self.context.thread_num = self.num + 1
         self.load_hooks()
         self.load_step_definitions()
         assert not self.aborted
