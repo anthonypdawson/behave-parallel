@@ -75,7 +75,7 @@ import codecs
 from xml.etree import ElementTree
 from datetime import datetime
 from behave.reporter.base import Reporter
-from behave.model import Scenario, ScenarioOutline, Step
+from behave.model import Rule, Scenario, ScenarioOutline, Step
 from behave.model_core import Status
 from behave.formatter import ansi_escapes
 from behave.model_describe import ModelDescriptor
@@ -231,13 +231,8 @@ class JUnitReporter(Reporter):
         feature_name = feature.name or feature_filename
         suite.set(u'name', u'%s.%s' % (classname, feature_name))
 
-        # -- BUILD-TESTCASES: From scenarios
-        for scenario in feature:
-            if isinstance(scenario, ScenarioOutline):
-                scenario_outline = scenario
-                self._process_scenario_outline(scenario_outline, report)
-            else:
-                self._process_scenario(scenario, report)
+        # -- BUILD-TESTCASES: From run_items (and scenarios)
+        self._process_run_items_for(feature, report)
 
         # -- ADD TESTCASES to testsuite:
         for testcase in report.testcases:
@@ -444,15 +439,34 @@ class JUnitReporter(Reporter):
         case.append(stdout)
 
         # Create stderr section for each test case
+        stderr = ElementTree.Element(u"system-err")
+        text = u''
         if scenario.captured.stderr:
-            stderr = ElementTree.Element(u"system-err")
-            output = _text(scenario.captured.stderr)
-            text = u"\nCaptured stderr:\n%s\n" % output
+            text += u"\nCaptured stderr:\n" \
+                    + _text(scenario.captured.stderr) + u'\n'
+
+        if scenario.captured.log_output:
+            text += u"\nCaptured logs:\n" \
+                    + _text(scenario.captured.log_output) + u'\n'
+        if text:
             stderr.append(CDATA(text))
             case.append(stderr)
 
         if scenario.status != Status.skipped or self.show_skipped:
             report.testcases.append(case)
+
+    def _process_run_items_for(self, parent, report):
+        for run_item in parent.run_items:
+            if isinstance(run_item, Rule):
+                self._process_rule(run_item, report)
+            elif isinstance(run_item, ScenarioOutline):
+                self._process_scenario_outline(run_item, report)
+            else:
+                assert isinstance(run_item, Scenario)
+                self._process_scenario(run_item, report)
+
+    def _process_rule(self, rule, report):
+        self._process_run_items_for(rule, report)
 
     def _process_scenario_outline(self, scenario_outline, report):
         assert isinstance(scenario_outline, ScenarioOutline)

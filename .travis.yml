@@ -1,17 +1,19 @@
 language: python
 sudo: false
+dist: xenial   # required for Python >= 3.7
 python:
-  - "3.6"
+  - "3.8-dev"
+  - "3.7"
   - "2.7"
-  - "3.5"
-  - "pypy"
-  - "pypy3"
-  - "3.7-dev"
+
+# -- DISABLE-TEMPORARILY: Ensure faster builds
+#  - "3.6"
+#  - "3.5"
+#  - "pypy"
+#  - "pypy3"
 
 # -- DISABLED:
 #  - "nightly"
-#  - "3.4"
-#  - "3.3"
 #
 # NOW SUPPORTED: "3.5" => python 3.5.2 (>= 3.5.1)
 # NOTE: nightly = 3.7-dev
@@ -19,7 +21,7 @@ python:
 # -- TEST-BALLON: Check if Python 3.6 is actually Python 3.5.1 or newer
 matrix:
   allow_failures:
-    - python: "3.7-dev"
+    - python: "3.8-dev"
     - python: "nightly"
 
 cache:
@@ -33,7 +35,7 @@ install:
 
 script:
   - python --version
-  - pytest test tests
+  - pytest tests
   - behave -f progress --junit features/
   - behave -f progress --junit tools/test-features/
   - behave -f progress --junit issue.features/
