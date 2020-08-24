@@ -11,7 +11,7 @@
 invoke >= 0.21.0
 six >= 1.11.0
 path.py >= 10.1
-pathlib;    python_version <= '3.4'
+pathlib==1.0.1;    python_version <= '3.4'
 backports.shutil_which; python_version <= '3.3'
 
 # For cleanup of python files: py.cleanup
