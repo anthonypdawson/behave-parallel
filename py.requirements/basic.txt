@@ -12,7 +12,7 @@ parse >= 1.8.2
 parse_type >= 0.4.2
 six >= 1.11.0
 
-traceback2;  python_version < '3.0'
+traceback2==1.4.0;  python_version < '3.0'
 contextlib2     # MAYBE: python_version < '3.5'
 win_unicode_console >= 0.5;  python_version >= '2.7'
 colorama >= 0.3.7
