@@ -8,7 +8,7 @@
 invoke >= 0.21.0
 path.py >= 10.1
 pathlib;    python_version <= '3.4'
-pycmd
+pycmd==1.2
 
 # -- CONFIGURATION MANAGEMENT (helpers):
 bumpversion >= 0.4.0
