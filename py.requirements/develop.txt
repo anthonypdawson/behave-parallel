@@ -17,7 +17,7 @@ bumpversion >= 0.4.0
 # PREPARED: nose-cov >= 1.4
 tox   >= 1.8.1
 coverage >= 4.2
-pytest-cov
+pytest-cov==2.10.1
 
 # -- PYTHON2/3 COMPATIBILITY: pypa/modernize
 # python-futurize
