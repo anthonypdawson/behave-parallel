@@ -15,4 +15,4 @@ pathlib;    python_version <= '3.4'
 backports.shutil_which; python_version <= '3.3'
 
 # For cleanup of python files: py.cleanup
-pycmd
+pycmd==1.2
